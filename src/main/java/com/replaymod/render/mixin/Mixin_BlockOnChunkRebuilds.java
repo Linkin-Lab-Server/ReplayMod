@@ -24,7 +24,11 @@ import java.util.concurrent.locks.ReentrantLock;
 public abstract class Mixin_BlockOnChunkRebuilds implements ForceChunkLoadingHook.IBlockOnChunkRebuilds {
     @Shadow @Final private Queue<BlockBufferBuilderStorage> threadBuffers;
 
+    //#if MC == 114514
+    //$$@Shadow public abstract void upload();
+    //#else
     @Shadow public abstract boolean upload();
+    //#endif
 
     @Shadow @Final private TaskExecutor<Runnable> mailbox;
 
@@ -108,6 +112,11 @@ public abstract class Mixin_BlockOnChunkRebuilds implements ForceChunkLoadingHoo
         }
     }
 
+    //#if MC == 114514
+    //$$@Shadow
+    //$$public abstract int getChunksToUpload();
+    //#endif
+
     @Override
     public boolean uploadEverythingBlocking() {
         boolean anything = false;
@@ -115,7 +124,12 @@ public abstract class Mixin_BlockOnChunkRebuilds implements ForceChunkLoadingHoo
         boolean allChunksBuilt;
         do {
             allChunksBuilt = waitForMainThreadWork();
+            //#if MC == 114514
+            //$$while (getChunksToUpload() > 0) {
+            //$$    upload();
+            //#else
             while (upload()) {
+            //#endif
                 anything = true;
             }
         } while (!allChunksBuilt);

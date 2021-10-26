@@ -597,47 +597,100 @@ public class FullReplaySender extends ChannelDuplexHandler implements ReplaySend
 
         if(p instanceof GameJoinS2CPacket) {
             GameJoinS2CPacket packet = (GameJoinS2CPacket) p;
+            //#if MC == 114514
+            //$$ int entId = packet.playerEntityId();
+            //#else
             int entId = packet.getEntityId();
+            //#endif
             allowMovement = true;
             actualID = entId;
             entId = -1789435; // Camera entity id should be negative which is an invalid id and can't be used by servers
             //#if MC>=11400
             p = new GameJoinS2CPacket(
                     entId,
+                    //#if MC == 114514
+                    //$$false,
+                    //#endif
                     GameMode.SPECTATOR,
                     //#if MC>=11600
                     GameMode.SPECTATOR,
                     //#endif
                     //#if MC>=11500
+                    //#if MC == 114514
+                    //#else
                     packet.getSha256Seed(),
                     //#endif
+                    //#endif
+                    //#if MC == 114514
+                    //#else
                     false,
+                    //#endif
                     //#if MC>=11600
                     //#if MC>=11603
+                    //#if MC == 114514
+                    //$$packet.dimensionIds(),
+                    //#else
                     packet.getDimensionIds(),
+                    //#endif
+                    //#if MC == 114514
+                    //$$(net.minecraft.util.registry.DynamicRegistryManager.Impl) packet.registryManager(),
+                    //#else
                     (net.minecraft.util.registry.DynamicRegistryManager.Impl) packet.getRegistryManager(),
+                    //#endif
+                    //#if MC == 114514
+                    //$$packet.dimensionType(),
+                    //#else
                     packet.getDimensionType(),
+                    //#endif
                     //#else
                     //$$ packet.method_29443(),
                     //$$ (net.minecraft.util.registry.RegistryTracker.Modifiable) packet.getDimension(),
                     //$$ packet.method_29444(),
                     //#endif
+                    //#if MC == 114514
+                    //$$packet.dimensionId(),
+                    //#else
                     packet.getDimensionId(),
+                    //#endif
                     //#else
                     //$$ packet.getDimension(),
+                    //#endif
+                    //#if MC == 114514
+                    //$$packet.sha256Seed(),
                     //#endif
                     0, // max players (has no getter -> never actually used)
                     //#if MC<11600
                     //$$ packet.getGeneratorType(),
                     //#endif
+                    //#if MC == 114514
+                    //$$packet.viewDistance(),
+                    //#else
                     packet.getViewDistance(),
+                    //#endif
+                    //#if MC == 114514
+                    //$$packet.simulationDistance(),
+                    //$$packet.reducedDebugInfo()
+                    //#else
                     packet.hasReducedDebugInfo()
+                    //#endif
                     //#if MC>=11500
+                    //#if MC == 114514
+                    //$$, packet.showDeathScreen()
+                    //#else
                     , packet.showsDeathScreen()
                     //#endif
+                    //#endif
                     //#if MC>=11600
+                    //#if MC == 114514
+                    //$$, packet.debugWorld()
+                    //#else
                     , packet.isDebugWorld()
+                    //#endif
+                    //#if MC == 114514
+                    //$$, packet.flatWorld()
+                    //#else
                     , packet.isFlatWorld()
+                    //#endif
                     //#endif
             );
             //#else

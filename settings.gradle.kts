@@ -50,6 +50,7 @@ val replayModVersions = listOf(
         "1.16.4",
         "1.17",
         "1.17.1",
+        "21w41a"
 )
 
 rootProject.buildFileName = "root.gradle.kts"

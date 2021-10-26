@@ -185,7 +185,11 @@ public class Util {
     public static String getTileEntityId(BlockEntity tileEntity) {
         CompoundTag nbt = new CompoundTag();
         //#if MC>=11400
+        //#if MC == 114514
+        //$$nbt = tileEntity.createNbtWithId();
+        //#else
         tileEntity.toTag(nbt);
+        //#endif
         //#else
         //$$ tileEntity.writeToNBT(nbt);
         //#endif

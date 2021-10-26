@@ -24,6 +24,8 @@ public abstract class Mixin_ForceChunkLoading implements IForceChunkLoading {
         this.replayModRender_hook = hook;
     }
 
+    //#if MC == 114514
+    //#else
     @Shadow private Set<ChunkBuilder.BuiltChunk> chunksToRebuild;
 
     @Shadow private ChunkBuilder chunkBuilder;
@@ -74,4 +76,5 @@ public abstract class Mixin_ForceChunkLoading implements IForceChunkLoading {
             passThrough = false;
         }
     }
+    //#endif
 }

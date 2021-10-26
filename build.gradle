@@ -2,8 +2,13 @@ import com.replaymod.gradle.preprocess.PreprocessTask
 
 buildscript {
     def mcVersion
-    def (major, minor, patch) = project.name.tokenize('-')[0].tokenize('.')
-    mcVersion = "${major}${minor.padLeft(2, '0')}${(patch ?: '').padLeft(2, '0')}" as int
+    if (project.name == "21w41a") {
+        mcVersion = 114514
+    } else {
+        def (major, minor, patch) = project.name.tokenize('-')[0].tokenize('.')
+        mcVersion = "${major}${minor.padLeft(2, '0')}${(patch ?: '').padLeft(2, '0')}" as int
+    }
+
     def fabric = mcVersion >= 11400 && !project.name.endsWith("-forge")
     project.ext.mcVersion = mcVersion
     project.ext.fabric = fabric
@@ -55,6 +60,9 @@ def FG3 = !fabric && mcVersion >= 11400
 def FABRIC = fabric
 
 def jGuiVersion = project.name
+if (jGuiVersion == "21w41a") {
+    jGuiVersion = "1.17.1"
+}
 if (['1.10.2', '1.11', '1.11.2'].contains(jGuiVersion)) jGuiVersion = '1.9.4'
 if (['1.12.1', '1.12.2'].contains(jGuiVersion)) jGuiVersion = '1.12'
 def jGui = project.evaluationDependsOn(":jGui:$jGuiVersion")
@@ -107,6 +115,10 @@ preprocess {
 }
 
 def mcVersionStr = "${(int)(mcVersion/10000)}.${(int)(mcVersion/100)%100}" + (mcVersion%100==0 ? '' : ".${mcVersion%100}")
+
+if (mcVersion == 114514) {
+    mcVersionStr = "21w41a"
+}
 
 sourceCompatibility = targetCompatibility = mcVersion >= 11700 ? 16 : 1.8
 tasks.withType(JavaCompile).configureEach {
@@ -243,6 +255,7 @@ dependencies {
                 11604: '1.16.4',
                 11700: '1.17',
                 11701: '1.17.1',
+                114514: '21w41a'
         ][mcVersion]
         mappings 'net.fabricmc:yarn:' + [
                 11404: '1.14.4+build.16',
@@ -252,6 +265,7 @@ dependencies {
                 11604: '1.16.4+build.6:v2',
                 11700: '1.17+build.13:v2',
                 11701: '1.17.1+build.29:v2',
+                114514: '21w41a+build.21:v2'
         ][mcVersion]
         modImplementation 'net.fabricmc:fabric-loader:0.11.6'
         def fabricApiVersion = [
@@ -262,6 +276,7 @@ dependencies {
                 11604: '0.25.1+build.416-1.16',
                 11700: '0.36.0+1.17',
                 11701: '0.37.1+1.17',
+                114514: '0.41.1+1.18'
         ][mcVersion]
         def fabricApiModules = [
                 "api-base",
